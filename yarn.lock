@@ -1900,7 +1900,7 @@ mktmpdir@^0.1.1:
   dependencies:
     rimraf "~2.2.8"
 
-moment@2.x.x:
+moment@2.x.x, moment@^2.19.4:
   version "2.19.4"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.4.tgz#17e5e2c6ead8819c8ecfad83a0acccb312e94682"
 
