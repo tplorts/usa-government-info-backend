@@ -1,0 +1,33 @@
+{
+  "name": "Legislator",
+  "base": "GovernmentOfficial",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "state": {
+      "type": "string",
+      "required": true
+    },
+    "party": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {
+    "fetch": {
+      "returns": [
+        {
+          "arg": "result",
+          "type": "object",
+          "root": true
+        }
+      ]
+    },
+    "fetchUpdates": {}
+  }
+}

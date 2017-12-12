@@ -1,0 +1,15 @@
+---
+extends:
+  - standard
+
+rules:
+  comma-dangle:
+    - error
+    - always-multiline
+  no-multi-str: off
+  no-multiple-empty-lines:
+    - warn
+    - max: 3
+      maxBOF: 1
+      maxEOF: 1
+  no-unused-vars: warn

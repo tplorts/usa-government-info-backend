@@ -1,0 +1,12 @@
+{
+  "postgres": {
+    "host": "localhost",
+    "port": 5432,
+    "url": "${DATABASE_URL}",
+    "database": "usa-government-info",
+    "username": "${LOCAL_POSTGRESQL_USERNAME}",
+    "password": "${LOCAL_POSTGRESQL_PASSWORD}",
+    "name": "postgres",
+    "connector": "postgresql"
+  }
+}

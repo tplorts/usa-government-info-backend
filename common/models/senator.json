@@ -1,0 +1,25 @@
+{
+  "name": "Senator",
+  "base": "Legislator",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "leadershipPosition": {
+      "type": "string"
+    },
+    "classNumber": {
+      "type": "number",
+      "required": true
+    },
+    "bioguideId": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

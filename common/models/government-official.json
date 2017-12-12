@@ -1,0 +1,40 @@
+{
+  "name": "GovernmentOfficial",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "surname": {
+      "type": "string",
+      "required": true
+    },
+    "givenName": {
+      "type": "string",
+      "required": true
+    },
+    "isVacant": {
+      "type": "boolean"
+    },
+    "websiteUrl": {
+      "type": "string"
+    },
+    "contactUrl": {
+      "type": "string"
+    },
+    "officeAddress": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "string"
+    },
+    "emailAddress": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
