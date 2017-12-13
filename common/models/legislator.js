@@ -1,6 +1,8 @@
 'use strict'
 
 const { isNil } = require('lodash')
+const schedule = require('node-schedule')
+const moment = require('moment-timezone')
 
 const { log } = console
 
@@ -54,5 +56,29 @@ module.exports = function (Legislator) {
     log(`finished deleting out of date ${modelName}s`)
     await Promise.all(savePromises)
     log(`finished saving updated ${modelName}s`)
+  }
+
+
+  const ServerTimezone = moment.tz.guess()
+  const Eastern = 'America/New_York'
+  const UpdateTime = moment.tz('5:00', 'h:m', Eastern).tz(ServerTimezone)
+
+  function jobTimeForMoment (m) {
+    return {
+      hour: m.hour(),
+      minute: m.minute(),
+    }
+  }
+
+  Legislator.scheduleUpdates = function () {
+    log(`daily update time will be ${UpdateTime.format()}`)
+    Legislator.updateJob = schedule.scheduleJob(jobTimeForMoment(UpdateTime), Legislator.updateAll)
+  }
+
+  Legislator.updateAll = function () {
+    const { Senator, Representative } = Legislator.app.models
+    for (const Model of [ Senator, Representative ]) {
+      Model.fetchUpdates()
+    }
   }
 }
