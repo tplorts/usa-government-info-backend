@@ -1,6 +1,7 @@
+const httpRequest = require('request-promise-native')
 const { xml2js } = require('xml-js')
 const { camelCase: toCamelCase } = require('change-case')
-const { httpDownload } = require('./http-download')
+
 
 const { log } = console
 
@@ -12,7 +13,7 @@ const keyConversions = {
   firstName: 'givenName',
   email: 'contactUrl',
   website: 'websiteUrl',
-  class: 'classNumber'
+  class: 'classNumber',
 }
 
 const valueTransforms = {
@@ -21,7 +22,7 @@ const valueTransforms = {
   address: s => s.replace(/\s+/g, ' '),
 }
 
-function condenseSenatorField(key, elements) {
+function condenseSenatorField (key, elements) {
   const N = elements.length
   if (N !== 1) {
     throw new Error(`expected one element per senator field; got ${N} for "${key}"`)
@@ -36,7 +37,7 @@ function condenseSenatorField(key, elements) {
   return transform ? transform(value) : value
 }
 
-function condenseSenator(elements) {
+function condenseSenator (elements) {
   const senator = {}
   for (const element of elements) {
     let key = toCamelCase(element.name)
@@ -59,7 +60,7 @@ class SenateXmlParser {
   }
 
   async download () {
-    this.xml = await httpDownload(this.sourceUrl, 'text/xml')
+    this.xml = await httpRequest(this.sourceUrl)
   }
 
   parse () {

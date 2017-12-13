@@ -1,7 +1,7 @@
 
+const httpRequest = require('request-promise-native')
 const { JSDOM } = require('jsdom')
 const { camelCase: toCamelCase } = require('change-case')
-const { httpDownload } = require('./http-download')
 const { RegionAbbreviations } = require('./usa-regions')
 
 
@@ -67,7 +67,7 @@ class HouseScraper {
   }
 
   async download () {
-    this.html = await httpDownload(this.sourceUrl, 'text/html')
+    this.html = await httpRequest(this.sourceUrl)
   }
 
   scrapeRow (state, row) {
