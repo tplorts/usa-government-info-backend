@@ -55,7 +55,9 @@ module.exports = function (Legislator) {
     await Model.destroyAll({ id: {inq: idsToDelete} })
     log(`finished deleting out of date ${modelName}s`)
     await Promise.all(savePromises)
-    log(`finished saving updated ${modelName}s`)
+    log(`finished saving ${savePromises.length} updated ${modelName}s`)
+
+    await Legislator.setTimeLastUpdated(Model, moment())
   }
 
 
@@ -73,6 +75,35 @@ module.exports = function (Legislator) {
   Legislator.scheduleUpdates = function () {
     log(`daily update time will be ${UpdateTime.format()}`)
     Legislator.updateJob = schedule.scheduleJob(jobTimeForMoment(UpdateTime), Legislator.updateAll)
+  }
+
+  Legislator.timeLastUpdated = async function (Model) {
+    const { DataState } = Legislator.app.models
+    const stateKey = Model.keyLastUpdated
+    return DataState.getValue(stateKey)
+  }
+
+  Legislator.setTimeLastUpdated = async function (Model, time) {
+    const { DataState } = Legislator.app.models
+    const stateKey = Model.keyLastUpdated
+    return DataState.set(stateKey, time)
+  }
+
+  Legislator.updateIfNeeded = async function (Model) {
+    let lastUpdated = await Legislator.timeLastUpdated(Model)
+    if (!lastUpdated) {
+      log(`No info for ${Model.keyLastUpdated}`)
+      return null
+    }
+    log(`${Model.keyLastUpdated}: ${lastUpdated.fromNow()}`)
+    const yesterday = moment().subtract(1, 'days')
+    if (lastUpdated.isBefore(yesterday)) {
+      log('Too stale.  Needs update.')
+      return Model.fetchUpdates()
+    } else {
+      log('No need to update.')
+      return lastUpdated
+    }
   }
 
   Legislator.updateAll = function () {

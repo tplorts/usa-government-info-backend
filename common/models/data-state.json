@@ -13,6 +13,9 @@
     "value": {
       "type": "string"
     },
+    "dataType": {
+      "type": "string"
+    },
     "lastUpdated": {
       "type": "date",
       "defaultFn": "now"

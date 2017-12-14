@@ -8,7 +8,7 @@ const app = module.exports = loopback()
 const { log } = console
 
 process.on('unhandledRejection', (reason, p) => {
-  log('   ...unhandledRejection...')
+  log('   ...unhandledRejection...', reason)
 })
 
 
