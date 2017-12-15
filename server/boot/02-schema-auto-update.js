@@ -1,4 +1,5 @@
 'use strict'
+const { envBoolean } = require('../../common/helpers')
 
 const { log } = console
 
@@ -8,8 +9,7 @@ module.exports = async function (app, next) {
   log('database schema check')
   const { postgres } = app.dataSources
 
-  const EnvResetDB = process.env.LB_RESET_DATABASE
-  const resetDatabase = !!(EnvResetDB && EnvResetDB === 'true')
+  const resetDatabase = envBoolean('LB_RESET_DATABASE')
   log('reset database?', resetDatabase)
 
   if (resetDatabase) {

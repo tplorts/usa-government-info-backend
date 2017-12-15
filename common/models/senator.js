@@ -6,7 +6,7 @@ const { SenateXmlParser } = require('../senate-xml-parser')
 
 module.exports = function (Senator) {
   Senator.keyLastUpdated = 'senateUpdated'
-  Senator.sourceUrl = 'https://www.senate.gov/general/contact_information/senators_cfm.xml'
+  Senator.sourceUrl = process.env.SENATORS_SOURCE_URL || 'https://www.senate.gov/general/contact_information/senators_cfm.xml'
   Senator.Parser = SenateXmlParser
 
   const Legislator = () => Senator.app.models.Legislator

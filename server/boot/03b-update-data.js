@@ -1,14 +1,15 @@
 'use strict'
+const { envBoolean } = require('../../common/helpers')
 
 const { log } = console
+
+
 
 module.exports = async function (app, next) {
   log('________________________________')
   log('update legislator data if needed')
 
-  const EnvUpdate = process.env.UPDATE_LEGISLATORS_ON_BOOT
-  const isUpdateEnabled = !!(EnvUpdate && EnvUpdate === 'true')
-
+  const isUpdateEnabled = envBoolean('UPDATE_LEGISLATORS_ON_BOOT')
   const { Legislator, Senator, Representative } = app.models
 
   try {

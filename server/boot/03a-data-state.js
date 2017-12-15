@@ -9,16 +9,13 @@ function oneWeekAgo () {
 
 module.exports = async function (app, next) {
   log('________________________________')
-  log('initiate missing data states')
+  log('check data states')
 
   const { DataState, Senator, Representative } = app.models
 
   try {
     const promiseToInitiate = Model => DataState.initiate(Model.keyLastUpdated, oneWeekAgo, 'date')
     const states = await Promise.all([ Senator, Representative ].map(promiseToInitiate))
-    //   await DataState.initiate('senateUpdated', oneWeekAgo, 'date'),
-    //   await DataState.initiate('houseUpdated', oneWeekAgo, 'date'),
-    // ]
     for (const {key, value} of states) {
       log(`${key}: ${value}`)
     }

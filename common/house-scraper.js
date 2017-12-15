@@ -59,7 +59,7 @@ function parseCell (key, cell) {
 
 class HouseScraper extends DataParser {
   constructor (url) {
-    super(url || process.env.REPRESENTATIVES_SOURCE_URL || 'https://www.house.gov/representatives')
+    super(url, { useAnyOrigin: false })
     this.fieldKeys = null
     this.representatives = null
   }

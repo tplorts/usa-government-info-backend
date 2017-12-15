@@ -6,7 +6,7 @@ const { HouseScraper } = require('../house-scraper')
 
 module.exports = function (Representative) {
   Representative.keyLastUpdated = 'houseUpdated'
-  Representative.sourceUrl = 'https://www.house.gov/representatives'
+  Representative.sourceUrl = process.env.REPRESENTATIVES_SOURCE_URL || 'https://www.house.gov/representatives'
   Representative.Parser = HouseScraper
 
   const Legislator = () => Representative.app.models.Legislator

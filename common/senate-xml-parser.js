@@ -3,9 +3,6 @@ const { xml2js } = require('xml-js')
 const { camelCase: toCamelCase } = require('change-case')
 
 
-const { log } = console
-
-
 
 const keyConversions = {
   memberFull: null,
@@ -54,7 +51,7 @@ function condenseSenator (elements) {
 
 class SenateXmlParser extends DataParser {
   constructor (url) {
-    super(url || process.env.SENATORS_SOURCE_URL || 'https://www.senate.gov/general/contact_information/senators_cfm.xml')
+    super(url, { useAnyOrigin: true })
     this.senators = null
   }
 
