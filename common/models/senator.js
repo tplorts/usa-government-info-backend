@@ -8,12 +8,8 @@ module.exports = function (Senator) {
   Senator.keyLastUpdated = 'senateUpdated'
   Senator.Parser = SenateXmlParser
 
-  Senator.sourceUrl = function () {
-    return process.env.SENATORS_SOURCE_URL || 'https://www.senate.gov/general/contact_information/senators_cfm.xml'
-  }
+  const Legislator = () => Senator.app.models.Legislator
 
-  Senator.fetchUpdates = async function () {
-    const { Legislator } = Senator.app.models
-    return Legislator.fetchUpdates(Senator)
-  }
+  Senator.fetch = () => Legislator().fetch(Senator)
+  Senator.fetchUpdates = () => Legislator().fetchUpdates(Senator)
 }

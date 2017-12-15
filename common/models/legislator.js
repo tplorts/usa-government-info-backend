@@ -17,7 +17,7 @@ module.exports = function (Legislator) {
   }
 
   Legislator.fetch = async function (Model) {
-    const parser = new Model.Parser(Model.sourceUrl())
+    const parser = new Model.Parser()
     await parser.download()
     return parser.parse()
   }

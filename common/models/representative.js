@@ -8,12 +8,8 @@ module.exports = function (Representative) {
   Representative.keyLastUpdated = 'houseUpdated'
   Representative.Parser = HouseScraper
 
-  Representative.sourceUrl = function () {
-    return process.env.REPRESENTATIVES_SOURCE_URL || 'https://www.house.gov/representatives'
-  }
+  const Legislator = () => Representative.app.models.Legislator
 
-  Representative.fetchUpdates = async function () {
-    const { Legislator } = Representative.app.models
-    return Legislator.fetchUpdates(Representative)
-  }
+  Representative.fetch = () => Legislator().fetch(Representative)
+  Representative.fetchUpdates = () => Legislator().fetchUpdates(Representative)
 }

@@ -54,7 +54,7 @@ function condenseSenator (elements) {
 
 class SenateXmlParser extends DataParser {
   constructor (url) {
-    super(url)
+    super(url || process.env.SENATORS_SOURCE_URL || 'https://www.senate.gov/general/contact_information/senators_cfm.xml')
     this.senators = null
   }
 
