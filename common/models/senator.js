@@ -6,12 +6,10 @@ const { SenateXmlParser } = require('../senate-xml-parser')
 
 module.exports = function (Senator) {
   Senator.keyLastUpdated = 'senateUpdated'
+  Senator.Parser = SenateXmlParser
 
-  Senator.fetch = async function () {
-    const url = process.env.SENATORS_SOURCE_URL || 'https://www.senate.gov/general/contact_information/senators_cfm.xml'
-    const parser = new SenateXmlParser(url)
-    await parser.download()
-    return parser.parse()
+  Senator.sourceUrl = function () {
+    return process.env.SENATORS_SOURCE_URL || 'https://www.senate.gov/general/contact_information/senators_cfm.xml'
   }
 
   Senator.fetchUpdates = async function () {

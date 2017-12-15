@@ -6,12 +6,10 @@ const { HouseScraper } = require('../house-scraper')
 
 module.exports = function (Representative) {
   Representative.keyLastUpdated = 'houseUpdated'
+  Representative.Parser = HouseScraper
 
-  Representative.fetch = async function () {
-    const url = process.env.REPRESENTATIVES_SOURCE_URL || 'https://www.house.gov/representatives'
-    const scraper = new HouseScraper(url)
-    await scraper.download()
-    return scraper.scrape()
+  Representative.sourceUrl = function () {
+    return process.env.REPRESENTATIVES_SOURCE_URL || 'https://www.house.gov/representatives'
   }
 
   Representative.fetchUpdates = async function () {

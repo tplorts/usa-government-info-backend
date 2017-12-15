@@ -1,4 +1,4 @@
-const httpRequest = require('request-promise-native')
+const { DataParser } = require('./data-parser')
 const { xml2js } = require('xml-js')
 const { camelCase: toCamelCase } = require('change-case')
 
@@ -52,19 +52,14 @@ function condenseSenator (elements) {
 }
 
 
-class SenateXmlParser {
+class SenateXmlParser extends DataParser {
   constructor (url) {
-    this.sourceUrl = url
-    this.xml = null
+    super(url)
     this.senators = null
   }
 
-  async download () {
-    this.xml = await httpRequest(this.sourceUrl)
-  }
-
   parse () {
-    const senateInfo = xml2js(this.xml)
+    const senateInfo = xml2js(this.rawData)
     const [ rootElement ] = senateInfo.elements
     this.senators = rootElement.elements.map(e => condenseSenator(e.elements)).filter(o => Object.keys(o).length > 0)
     return this.senators

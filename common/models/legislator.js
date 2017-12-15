@@ -16,6 +16,12 @@ module.exports = function (Legislator) {
     return lacks(a, field) && lacks(b, field)
   }
 
+  Legislator.fetch = async function (Model) {
+    const parser = new Model.Parser(Model.sourceUrl())
+    await parser.download()
+    return parser.parse()
+  }
+
   Legislator.fetchUpdates = async function (Model) {
     const { modelName } = Model
 
@@ -34,7 +40,7 @@ module.exports = function (Legislator) {
       downloadedRepresentatives,
       dbRepresentatives,
     ] = [
-      await Model.fetch(),
+      await Legislator.fetch(Model),
       await Model.find(),
     ]
 

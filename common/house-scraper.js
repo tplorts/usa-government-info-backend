@@ -1,5 +1,4 @@
-
-const httpRequest = require('request-promise-native')
+const { DataParser } = require('./data-parser')
 const { JSDOM } = require('jsdom')
 const { camelCase: toCamelCase } = require('change-case')
 const { RegionAbbreviations } = require('./usa-regions')
@@ -58,16 +57,11 @@ function parseCell (key, cell) {
 }
 
 
-class HouseScraper {
+class HouseScraper extends DataParser {
   constructor (url) {
-    this.sourceUrl = url
+    super(url)
     this.fieldKeys = null
-    this.html = null
     this.representatives = null
-  }
-
-  async download () {
-    this.html = await httpRequest(this.sourceUrl)
   }
 
   scrapeRow (state, row) {
@@ -83,8 +77,8 @@ class HouseScraper {
     return rep
   }
 
-  scrape () {
-    const { document } = (new JSDOM(this.html)).window
+  parse () {
+    const { document } = (new JSDOM(this.rawData)).window
     const byState = document.querySelector('#by-state')
     const stateTables = byState.querySelectorAll('table')
     const keyFromHeader = header => toCamelCase(textContent(header))
