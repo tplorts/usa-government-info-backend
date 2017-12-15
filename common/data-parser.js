@@ -11,15 +11,21 @@ class DataParser {
     this.rawData = null
   }
 
+  downloadUrl () {
+    // return this.sourceUrl
+    return `http://anyorigin.com/get?url=${this.sourceUrl}`
+  }
+
   async download () {
-    this.rawData = await httpRequest.get({
-      url: this.sourceUrl,
-      headers: {
-        'Access-Control-Request-Method': 'GET',
-        'User-Agent': UserAgent,
-        Origin,
-      },
-    })
+    // this.rawData = await httpRequest.get({
+    //   url: this.sourceUrl,
+    //   // headers: {
+    //   //   'Access-Control-Request-Method': 'GET',
+    //   //   'User-Agent': UserAgent,
+    //   //   Origin,
+    //   // },
+    // })
+    this.rawData = JSON.parse(await httpRequest.get(this.downloadUrl())).contents
   }
 
   parse (rawData) {}
