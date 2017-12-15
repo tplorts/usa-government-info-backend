@@ -58,7 +58,10 @@ class SenateXmlParser extends DataParser {
     this.senators = null
   }
 
-  parse () {
+  parse (rawData) {
+    if (rawData) {
+      this.rawData = rawData
+    }
     const senateInfo = xml2js(this.rawData)
     const [ rootElement ] = senateInfo.elements
     this.senators = rootElement.elements.map(e => condenseSenator(e.elements)).filter(o => Object.keys(o).length > 0)

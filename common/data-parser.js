@@ -22,7 +22,7 @@ class DataParser {
     })
   }
 
-  parse () {}
+  parse (rawData) {}
 }
 
 module.exports = {

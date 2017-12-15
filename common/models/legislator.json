@@ -19,6 +19,18 @@
   "relations": {},
   "acls": [],
   "methods": {
+    "get": {
+      "http": {
+        "verb": "get"
+      },
+      "returns": [
+        {
+          "arg": "result",
+          "type": "object",
+          "root": true
+        }
+      ]
+    },
     "fetch": {
       "returns": [
         {
@@ -28,6 +40,14 @@
         }
       ]
     },
-    "fetchUpdates": {}
+    "fetchUpdates": {},
+    "submitRawData": {
+      "accepts": [
+        {
+          "arg": "data",
+          "type": "string"
+        }
+      ]
+    }
   }
 }

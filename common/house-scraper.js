@@ -77,7 +77,10 @@ class HouseScraper extends DataParser {
     return rep
   }
 
-  parse () {
+  parse (rawData) {
+    if (rawData) {
+      this.rawData = rawData
+    }
     const { document } = (new JSDOM(this.rawData)).window
     const byState = document.querySelector('#by-state')
     const stateTables = byState.querySelectorAll('table')

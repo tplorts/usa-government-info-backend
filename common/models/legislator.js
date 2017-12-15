@@ -16,6 +16,14 @@ module.exports = function (Legislator) {
     return lacks(a, field) && lacks(b, field)
   }
 
+  Legislator.get = async function (Model) {
+    return {
+      sourceUrl: Model.sourceUrl,
+      results: await Model.find(),
+      lastUpdated: await Legislator.timeLastUpdated(Model),
+    }
+  }
+
   Legislator.fetch = async function (Model) {
     const parser = new Model.Parser()
     await parser.download()
@@ -23,6 +31,14 @@ module.exports = function (Legislator) {
   }
 
   Legislator.fetchUpdates = async function (Model) {
+    return Legislator.runUpdates(Model, () => Legislator.fetch(Model))
+  }
+
+  Legislator.submitRawData = function (Model, data) {
+    return Legislator.runUpdates(Model, () => new Model.Parser().parse(data))
+  }
+
+  Legislator.runUpdates = async function (Model, newDataFn) {
     const { modelName } = Model
 
     const fields = []
@@ -40,7 +56,7 @@ module.exports = function (Legislator) {
       downloadedRepresentatives,
       dbRepresentatives,
     ] = [
-      await Legislator.fetch(Model),
+      await newDataFn(),
       await Model.find(),
     ]
 
