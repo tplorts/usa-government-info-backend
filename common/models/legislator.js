@@ -63,7 +63,7 @@ module.exports = function (Legislator) {
     await Promise.all(savePromises)
     log(`finished saving ${savePromises.length} updated ${modelName}s`)
 
-    await Legislator.setTimeLastUpdated(Model, moment())
+    await Legislator.setTimeLastUpdated(Model, moment().format())
   }
 
 
