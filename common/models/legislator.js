@@ -6,15 +6,30 @@ const moment = require('moment-timezone')
 
 const { log } = console
 
+const ServerTimezone = moment.tz.guess()
+const Eastern = 'America/New_York'
+const UpdateTime = moment.tz('5:00', 'h:m', Eastern).tz(ServerTimezone)
+
+
+
+function jobTimeForMoment (m) {
+  return {
+    hour: m.hour(),
+    minute: m.minute(),
+  }
+}
+
+function lacks (x, field) {
+  return !(field in x) || isNil(x[field])
+}
+function bothLack (a, b, field) {
+  return lacks(a, field) && lacks(b, field)
+}
+
 
 
 module.exports = function (Legislator) {
-  function lacks (x, field) {
-    return !(field in x) || isNil(x[field])
-  }
-  function bothLack (a, b, field) {
-    return lacks(a, field) && lacks(b, field)
-  }
+  const DataState = () => Legislator.app.models.DataState
 
   Legislator.get = async function (Model) {
     return {
@@ -53,8 +68,8 @@ module.exports = function (Legislator) {
     }
 
     const [
-      downloadedRepresentatives,
-      dbRepresentatives,
+      downloadedRecords,
+      databaseRecords,
     ] = [
       await newDataFn(),
       await Model.find(),
@@ -62,17 +77,17 @@ module.exports = function (Legislator) {
 
     const upToDate = []
     const savePromises = []
-    for (const rep of downloadedRepresentatives) {
-      const i = dbRepresentatives.findIndex(r => areEqual(r, rep))
+    for (const record of downloadedRecords) {
+      const i = databaseRecords.findIndex(r => areEqual(r, record))
       if (i >= 0) {
-        upToDate.push(...dbRepresentatives.splice(i, 1))
+        upToDate.push(...databaseRecords.splice(i, 1))
       } else {
-        log(`creating ${modelName} ${rep.state}-${rep.party} ${rep.givenName} ${rep.surname}`)
-        savePromises.push(Model.create(rep))
+        log(`creating ${modelName} ${record.state}-${record.party} ${record.givenName} ${record.surname}`)
+        savePromises.push(Model.create(record))
       }
     }
 
-    const idsToDelete = dbRepresentatives.map(r => r.id)
+    const idsToDelete = databaseRecords.map(r => r.id)
     log(`delete ${modelName}s:`, idsToDelete)
     await Model.destroyAll({ id: {inq: idsToDelete} })
     log(`finished deleting out of date ${modelName}s`)
@@ -82,34 +97,13 @@ module.exports = function (Legislator) {
     await Legislator.setTimeLastUpdated(Model, moment().format())
   }
 
-
-  const ServerTimezone = moment.tz.guess()
-  const Eastern = 'America/New_York'
-  const UpdateTime = moment.tz('5:00', 'h:m', Eastern).tz(ServerTimezone)
-
-  function jobTimeForMoment (m) {
-    return {
-      hour: m.hour(),
-      minute: m.minute(),
-    }
-  }
-
   Legislator.scheduleUpdates = function () {
     log(`daily update time will be ${UpdateTime.format()}`)
     Legislator.updateJob = schedule.scheduleJob(jobTimeForMoment(UpdateTime), Legislator.updateAll)
   }
 
-  Legislator.timeLastUpdated = async function (Model) {
-    const { DataState } = Legislator.app.models
-    const stateKey = Model.keyLastUpdated
-    return DataState.getValue(stateKey)
-  }
-
-  Legislator.setTimeLastUpdated = async function (Model, time) {
-    const { DataState } = Legislator.app.models
-    const stateKey = Model.keyLastUpdated
-    return DataState.set(stateKey, time)
-  }
+  Legislator.timeLastUpdated = Model => DataState().getValue(Model.keyLastUpdated)
+  Legislator.setTimeLastUpdated = (Model, time) => DataState().set(Model.keyLastUpdated, time)
 
   Legislator.updateIfNeeded = async function (Model) {
     let lastUpdated = await Legislator.timeLastUpdated(Model)
