@@ -1,7 +1,14 @@
 const { DataParser } = require('./data-parser')
 const { JSDOM } = require('jsdom')
 const { camelCase: toCamelCase } = require('change-case')
-const { RegionAbbreviations } = require('./usa-regions')
+const UsaRegions = require('./usa-regions.json')
+
+
+
+const RegionAbbreviations = {}
+for (const region of UsaRegions) {
+  RegionAbbreviations[region.name] = region.abbreviation
+}
 
 
 
@@ -91,8 +98,7 @@ class HouseScraper extends DataParser {
 
     for (const table of stateTables) {
       const regionName = textContent(table.querySelector('caption'))
-      const abbrev = RegionAbbreviations[regionName]
-      const region = abbrev || regionName
+      const region = RegionAbbreviations[regionName] || regionName
       const repRows = Array.from(table.querySelectorAll('tbody tr'))
       const reps = repRows.map(row => this.scrapeRow(region, row))
       representatives.push(...reps)
