@@ -7,6 +7,6 @@ module.exports = function (app) {
   log('________________________________')
   log('schedule data updates')
 
-  const { Legislator } = app.models
-  Legislator.scheduleUpdates()
+  const { GovModel } = app.models
+  GovModel.scheduleUpdates()
 }

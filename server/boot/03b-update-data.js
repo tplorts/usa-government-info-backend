@@ -10,11 +10,13 @@ module.exports = async function (app, next) {
   log('update legislator data if needed')
 
   const isUpdateEnabled = envBoolean('UPDATE_LEGISLATORS_ON_BOOT')
-  const { Legislator, Senator, Representative } = app.models
+  const { GovModel, Senator, Representative, HouseCommittee } = app.models
 
   try {
     if (isUpdateEnabled) {
-      await Promise.all([ Senator, Representative ].map(Model => Legislator.updateIfNeeded(Model)))
+      await GovModel.updateIfNeeded(HouseCommittee)
+      await GovModel.updateIfNeeded(Senator)
+      await GovModel.updateIfNeeded(Representative)
     }
     next()
   } catch (err) {

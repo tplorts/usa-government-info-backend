@@ -20,12 +20,27 @@
   "acls": [],
   "methods": {
     "get": {
-      "http": {
-        "verb": "get"
-      },
       "returns": [
         {
           "arg": "result",
+          "type": "object",
+          "root": true
+        }
+      ],
+      "http": {
+        "verb": "get"
+      }
+    },
+    "make": {
+      "accepts": [
+        {
+          "arg": "record",
+          "type": "object"
+        }
+      ],
+      "returns": [
+        {
+          "arg": "instance",
           "type": "object",
           "root": true
         }

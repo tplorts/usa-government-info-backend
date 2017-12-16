@@ -9,10 +9,14 @@ module.exports = function (Senator) {
   Senator.sourceUrl = process.env.SENATORS_SOURCE_URL || 'https://www.senate.gov/general/contact_information/senators_cfm.xml'
   Senator.Parser = SenateXmlParser
 
-  const Legislator = () => Senator.app.models.Legislator
+  const GovModel = () => Senator.app.models.GovModel
 
-  Senator.submitRawData = data => Legislator().submitRawData(Senator, data)
-  Senator.get = () => Legislator().get(Senator)
-  Senator.fetch = () => Legislator().fetch(Senator)
-  Senator.fetchUpdates = () => Legislator().fetchUpdates(Senator)
+  Senator.submitRawData = data => GovModel().submitRawData(Senator, data)
+  Senator.get = () => GovModel().get(Senator)
+  Senator.fetch = () => GovModel().fetch(Senator)
+  Senator.fetchUpdates = () => GovModel().fetchUpdates(Senator)
+
+  Senator.make = async function (record) {
+    return Senator.create(record)
+  }
 }

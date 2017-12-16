@@ -48,35 +48,25 @@ module.exports = function (DataState) {
   }
 
 
+  function applyTransform (instanceData, transformsMap) {
+    const { dataType, value } = instanceData
+    if (dataType && dataType in transformsMap) {
+      const transform = transformsMap[dataType]
+      instanceData.value = transform(value)
+    }
+  }
+
 
   DataState.observe('before save', (ctx, next) => {
     const instanceData = ctx.instance || ctx.data
     instanceData.lastUpdated = new Date()
-    const { dataType, value } = instanceData
-    if (dataType) {
-      if (dataType in ValueTransformsIn) {
-        const transform = ValueTransformsIn[dataType]
-        instanceData.value = transform(value)
-      }
-    }
+    applyTransform(instanceData, ValueTransformsIn)
     next()
   })
 
 
-
   DataState.observe('loaded', (ctx, next) => {
-    const d = ctx.data
-    const { dataType, key, value } = d
-    if (dataType) {
-      if (dataType in ValueTransformsOut) {
-        const transform = ValueTransformsOut[dataType]
-        const newValue = transform(value)
-        // log(`transformed ${key}: ${value} -> ${newValue} [${typeof newValue}]`)
-        d.value = newValue
-      } else {
-        // log(`[DataState] unknown data type '${dataType}' for {${key}: ${value}}`)
-      }
-    }
+    applyTransform(ctx.data, ValueTransformsOut)
     next()
   })
 }

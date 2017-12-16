@@ -9,6 +9,9 @@
     "name": {
       "type": "string",
       "required": true
+    },
+    "websiteUrl": {
+      "type": "string"
     }
   },
   "validations": [],
@@ -20,5 +23,18 @@
     }
   },
   "acls": [],
-  "methods": {}
+  "methods": {
+    "unique": {
+      "returns": [
+        {
+          "arg": "committeeNames",
+          "type": "array",
+          "root": true
+        }
+      ],
+      "http": {
+        "verb": "get"
+      }
+    }
+  }
 }

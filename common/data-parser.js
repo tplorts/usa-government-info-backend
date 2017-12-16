@@ -1,4 +1,5 @@
 const httpRequest = require('request-promise-native')
+const { JSDOM } = require('jsdom')
 const { envBoolean } = require('./helpers')
 
 const { log } = console
@@ -26,9 +27,40 @@ class DataParser {
     this.rawData = this.useAnyOrigin ? JSON.parse(result).contents : result
   }
 
-  parse (rawData) {}
+  parse (rawData) {
+    if (rawData) {
+      this.rawData = rawData
+    }
+  }
 }
+
+
+
+class DataScraper extends DataParser {
+  constructor (...args) {
+    super(...args)
+    this.document = null
+  }
+
+  textContent (element) {
+    return element.textContent.trim()
+  }
+
+  initDocument () {
+    const { document } = (new JSDOM(this.rawData)).window
+    this.document = document
+    return document
+  }
+
+  parse (rawData) {
+    super.parse(rawData)
+    this.initDocument()
+  }
+}
+
+
 
 module.exports = {
   DataParser,
+  DataScraper,
 }
