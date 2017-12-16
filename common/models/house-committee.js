@@ -26,4 +26,6 @@ module.exports = function (HouseCommittee) {
     //       its memebers needs to be restored after deleting the old and making the new
     return HouseCommittee.create(record)
   }
+
+  HouseCommittee.toString = c => `${c.name}`
 }

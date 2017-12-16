@@ -10,6 +10,7 @@ module.exports = function (Senator) {
   Senator.Parser = SenateXmlParser
 
   const GovModel = () => Senator.app.models.GovModel
+  const Legislator = () => Senator.app.models.Legislator
 
   Senator.submitRawData = data => GovModel().submitRawData(Senator, data)
   Senator.get = () => GovModel().get(Senator)
@@ -19,4 +20,6 @@ module.exports = function (Senator) {
   Senator.make = async function (record) {
     return Senator.create(record)
   }
+
+  Senator.toString = s => Legislator().toString(s)
 }

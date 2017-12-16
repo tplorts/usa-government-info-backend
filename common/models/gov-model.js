@@ -86,7 +86,7 @@ module.exports = function (GovModel) {
       if (i >= 0) {
         upToDate.push(...databaseRecords.splice(i, 1))
       } else {
-        log(`creating ${modelName} ${record.state}-${record.party} ${record.givenName} ${record.surname}`)
+        log(`creating ${modelName} ${Model.toString(record)}`)
         savePromises.push(Model.make(record))
       }
     }

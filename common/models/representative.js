@@ -13,6 +13,8 @@ module.exports = function (Representative) {
   Representative.Parser = HouseScraper
 
   const GovModel = () => Representative.app.models.GovModel
+  const Legislator = () => Senator.app.models.Legislator
+
 
   Representative.submitRawData = data => GovModel().submitRawData(Representative, data)
   Representative.get = () => GovModel().get(Representative)
@@ -68,4 +70,7 @@ module.exports = function (Representative) {
 
     return committee ? this.committees.add(committee) : null
   }
+
+
+  Representative.toString = r => `${Legislator().toString(r)} ${r.district}`
 }
