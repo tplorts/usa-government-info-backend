@@ -8,7 +8,8 @@ const { log } = console
 
 const ServerTimezone = moment.tz.guess()
 const Eastern = 'America/New_York'
-const UpdateTime = moment.tz('5:00', 'h:m', Eastern).tz(ServerTimezone)
+const UpdateTimeString = process.env.DAILY_UDPATE_TIME_EASTERN || '5:00'
+const UpdateTime = moment.tz(UpdateTimeString, 'h:m', Eastern).tz(ServerTimezone)
 
 
 
@@ -127,8 +128,8 @@ module.exports = function (GovModel) {
   }
 
   GovModel.updateAll = async function () {
-    const { Senator, Representative, HouseCommittee } = GovModel.app.models
-    await HouseCommittee.fetchUpdates()
+    const { Senator, Representative } = GovModel.app.models
+    // await HouseCommittee.fetchUpdates()
     for (const Model of [ Senator, Representative ]) {
       Model.fetchUpdates()
     }
