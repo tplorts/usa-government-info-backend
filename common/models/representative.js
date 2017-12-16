@@ -13,7 +13,7 @@ module.exports = function (Representative) {
   Representative.Parser = HouseScraper
 
   const GovModel = () => Representative.app.models.GovModel
-  const Legislator = () => Senator.app.models.Legislator
+  const Legislator = () => Representative.app.models.Legislator
 
 
   Representative.submitRawData = data => GovModel().submitRawData(Representative, data)
