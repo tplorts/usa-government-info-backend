@@ -24,5 +24,8 @@
     }
   },
   "acls": [],
-  "methods": {}
+  "methods": {},
+  "scope": {
+    "include": ["committees"]
+  }
 }
